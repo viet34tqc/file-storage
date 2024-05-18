@@ -8,6 +8,7 @@ export const createFile = mutation({
   // args are the arguments passed to when we invoke createFile()
   args: {
     name: v.string(),
+    orgId: v.string(),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
@@ -16,17 +17,23 @@ export const createFile = mutation({
     }
     await ctx.db.insert('files', {
       name: args.name,
+      orgId: args.orgId,
     });
   },
 });
 
 export const getFiles = query({
-  args: {},
-  async handler(ctx) {
+  args: {
+    orgId: v.string(),
+  },
+  async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       return [];
     }
-    return ctx.db.query('files').collect();
+    return ctx.db
+      .query('files')
+      .withIndex('by_orgId', q => q.eq('orgId', args.orgId))
+      .collect();
   },
 });
