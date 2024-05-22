@@ -5,8 +5,10 @@ import { httpAction } from './_generated/server';
 
 const http = httpRouter();
 
-// What are we doing is to send a webhook from Clerk to the Convex server
-// when we create, update user or attach the user to an organization
+// What are we doing here is to connect Clerk and Convex
+// We utilize the Clerk webhook, which allow you to receive event notifications from Clerk, such as when a user is created or updated. When an event occurs, Clerk will send a POST request to your webhook endpoint configured for the event type
+// This file includes all the definition of Convex HTTP actions, which is what we will do when Clerk send a request.
+// The flow is as follows: Trigger Clerk event (create, update user...) => send POST request to Clerk webhook endpoint which is Convex HTTP actions URL => Convex will handle the request in 'handler' callback
 
 http.route({
   path: '/clerk',
