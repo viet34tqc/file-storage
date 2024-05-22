@@ -27,6 +27,8 @@ export const getFiles = query({
     orgId: v.string(),
   },
   async handler(ctx, args) {
+    // We are getting files by orgId
+    // So we need to check if the logged in user has access to that org
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       return [];
