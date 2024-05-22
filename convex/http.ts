@@ -28,15 +28,19 @@ http.route({
           'svix-signature': headerPayload.get('svix-signature')!,
         },
       });
+      console.log('result', result);
 
       switch (result.type) {
+        // When user created, we run an internalMutaion 'createUser', which is defined in users.ts
         case 'user.created':
           await ctx.runMutation(internal.users.createUser, {
             tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.id}`,
-            name: `${result.data.first_name ?? ''} ${
-              result.data.last_name ?? ''
-            }`,
-            image: result.data.image_url,
+          });
+          break;
+        case 'organization.created':
+          await ctx.runMutation(internal.users.addOrgIdToUser, {
+            tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.created_by}`,
+            orgId: result.data.id,
           });
           break;
       }
