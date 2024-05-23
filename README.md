@@ -22,8 +22,13 @@ This is a demo where I want to try new libraries: for authentication and data st
   - Select the 'Subscribed Event' for this webhook. When an event in the list happens, Clerk will send a POST Request to this endpoint URL.
   - Copy Signing secret and paste it as `CLERK_WEBHOOK_SECRET` environment variable
   - Create 'CLERK_HOSTNAME' environment variable, its value can be found in 'Domain' section in Clerk dashboard
+  - Go to Convex dashboard -> Settings, create `CLERK_WEBHOOK_SECRET` and `CLERK_HOSTNAME` variables with value like above
 
-## How it works
+## Features
+
+### Convex and Clerk Authentication
+
+This feature is setup in `auth.config.ts`. For further information, go to <https://docs.convex.dev/auth/clerk>.
 
 ### Clerk webhooks
 
