@@ -40,7 +40,13 @@ const formSchema = z.object({
 export function UploadButton() {
   const { toast } = useToast();
   const organization = useOrganization();
+  let orgId: string | undefined = undefined;
   const user = useUser();
+  if (organization.isLoaded && user.isLoaded) {
+    orgId = organization.organization?.id ?? user.user?.id;
+  }
+
+  const createFile = useMutation(api.files.createFile);
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,6 +58,8 @@ export function UploadButton() {
   });
 
   const fileRef = form.register('file');
+
+  const [isFileDialogOpen, setIsFileDialogOpen] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!orgId) return;
@@ -79,7 +87,6 @@ export function UploadButton() {
       form.reset();
 
       setIsFileDialogOpen(false);
-      console.log('đasa');
       toast({
         variant: 'success',
         title: 'File Uploaded',
@@ -93,15 +100,6 @@ export function UploadButton() {
       });
     }
   }
-
-  let orgId: string | undefined = undefined;
-  if (organization.isLoaded && user.isLoaded) {
-    orgId = organization.organization?.id ?? user.user?.id;
-  }
-
-  const [isFileDialogOpen, setIsFileDialogOpen] = useState(false);
-
-  const createFile = useMutation(api.files.createFile);
 
   return (
     <Dialog
