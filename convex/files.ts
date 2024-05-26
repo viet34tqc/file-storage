@@ -26,12 +26,11 @@ export const createFile = mutation({
   // args are the arguments passed to when we invoke createFile()
   args: {
     name: v.string(),
+    fileId: v.id('_storage'),
     orgId: v.string(),
   },
   async handler(ctx, args) {
-    console.log('args', args);
     const identity = await ctx.auth.getUserIdentity();
-    console.log('identity', identity);
     if (!identity) {
       throw new ConvexError('logged in please');
     }
@@ -47,6 +46,7 @@ export const createFile = mutation({
     await ctx.db.insert('files', {
       name: args.name,
       orgId: args.orgId,
+      fileId: args.fileId,
     });
   },
 });
@@ -56,12 +56,12 @@ export const getFiles = query({
     orgId: v.string(),
   },
   async handler(ctx, args) {
-    // We are getting files by orgId
-    // So we need to check if the logged in user has access to that org
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       return [];
     }
+    // We are getting files by orgId
+    // So we need to check if the logged in user has access to that org
     const hasAccess = await hasAccessToOrg(
       ctx,
       identity.tokenIdentifier,
@@ -75,4 +75,14 @@ export const getFiles = query({
       .withIndex('by_orgId', q => q.eq('orgId', args.orgId))
       .collect();
   },
+});
+
+export const generateUploadUrl = mutation(async ctx => {
+  const identity = await ctx.auth.getUserIdentity();
+
+  if (!identity) {
+    throw new ConvexError('you must be logged in to upload a file');
+  }
+
+  return await ctx.storage.generateUploadUrl();
 });
