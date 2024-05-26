@@ -57,6 +57,10 @@ export function UploadButton() {
     },
   });
 
+  // We use fileRef to treat file field as uncontrolled component
+  // The reason is because we are using shadcn which required the field to be controlled
+  // However, the file input must be uncontrolled component because its value can only be set by a user, and not programmatically. That's why we can't use 'field' property from 'render' method as `field` has 'value' property (which makes the component uncontrolled) while register() doesn't
+
   const fileRef = form.register('file');
 
   const [isFileDialogOpen, setIsFileDialogOpen] = useState(false);
