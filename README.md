@@ -39,3 +39,9 @@ Clerk webhooks allow you to receive event notifications from Clerk, such as when
 The flow is as follows: Trigger Clerk event (create, update user...) => send POST request to Clerk webhook endpoint which is Convex HTTP actions URL => Convex will handle the request in HTTP actions 'handler' callback
 
 The definition of Convex HTTP actions is in 'http.ts' file
+
+### Upload file with Convex
+
+Convex allow us to store uploaded file. First, we upload files to Convex. Each file have a `storage id` which is the value for `fileId` field of `files` schema.
+
+

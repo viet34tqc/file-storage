@@ -86,3 +86,31 @@ export const generateUploadUrl = mutation(async ctx => {
 
   return await ctx.storage.generateUploadUrl();
 });
+
+export const deleteFile = mutation({
+  args: {
+    fileId: v.id('files'),
+  },
+  async handler(ctx, args) {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new ConvexError('you must be logged in to upload a file');
+    }
+    const file = await ctx.db.get(args.fileId);
+    if (!file) throw new ConvexError('File does not exist');
+
+    // Because each file belongs to an org, we need to check if the user has access to that org
+    const hasAccess = await hasAccessToOrg(
+      ctx,
+      identity.tokenIdentifier,
+      file.orgId
+    );
+
+    if (!hasAccess) {
+      throw new ConvexError('You do not have access to delete the file');
+    }
+
+    await ctx.db.delete(args.fileId);
+  },
+});
