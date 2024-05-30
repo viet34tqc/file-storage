@@ -29,6 +29,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Doc } from '../../../../convex/_generated/dataModel';
+
+export const typesMap = {
+  'image/png': 'image',
+  'image/jpeg': 'image',
+  'image/jpg': 'image',
+  'application/pdf': 'pdf',
+  'text/csv': 'csv',
+} as Record<string, Doc<'files'>['type']>;
 
 const formSchema = z.object({
   title: z.string().min(1).max(200),
@@ -85,6 +94,7 @@ export function UploadButton() {
       await createFile({
         name: values.title,
         fileId: storageId,
+        type: typesMap[values.file[0].type],
         orgId,
       });
 
