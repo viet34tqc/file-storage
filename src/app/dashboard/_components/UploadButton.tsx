@@ -119,12 +119,15 @@ export function UploadButton() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="mb-8">Upload your File Here</DialogTitle>
-          <DialogDescription>
-            This file will be accessible by anyone in your organization
-          </DialogDescription>
+          {orgId && (
+            <DialogDescription>
+              This file will be accessible by anyone in your organization
+            </DialogDescription>
+          )}
         </DialogHeader>
-
-        <div>
+        {!orgId ? (
+          <p className="text-2xl font-bold">Please login to upload file</p>
+        ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -166,7 +169,7 @@ export function UploadButton() {
               </Button>
             </form>
           </Form>
-        </div>
+        )}
       </DialogContent>
     </Dialog>
   );

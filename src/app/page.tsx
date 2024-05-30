@@ -2,6 +2,7 @@
 
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { useQuery } from 'convex/react';
+import Image from 'next/image';
 import { api } from '../../convex/_generated/api';
 import FileCard from './dashboard/_components/FileCard';
 import { UploadButton } from './dashboard/_components/UploadButton';
@@ -17,9 +18,22 @@ export default function Home() {
         <h1 className="text-3xl font-bold">Your files</h1>
         <UploadButton />
       </div>
-      <div className="grid sm:grid-cols-4 gap-4">
-        {files?.map(file => <FileCard key={file._id} file={file} />)}
-      </div>
+      {!files || files.length === 0 ? (
+        <div className="flex flex-col gap-4 w-full items-center mt-12">
+          <Image
+            src="/empty.svg"
+            width="300"
+            height="300"
+            alt="An image of picture and directory icon"
+          />
+          <p>You have no files, upload one now</p>
+          <UploadButton />
+        </div>
+      ) : (
+        <div className="grid sm:grid-cols-4 gap-4">
+          {files?.map(file => <FileCard key={file._id} file={file} />)}
+        </div>
+      )}
     </main>
   );
 }
