@@ -44,4 +44,4 @@ The definition of Convex HTTP actions is in 'http.ts' file
 
 Convex allow us to store uploaded file. First, we upload files to Convex. Each file have a `storage id` which is the value for `fileId` field of `files` schema.
 
-
+A file URL can be generated from a storage ID by the `storage.getUrl` (I'm calling it in the `getFiles.ts`)

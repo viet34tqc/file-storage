@@ -8,11 +8,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 import { ReactNode } from 'react';
 import { Doc } from '../../../../convex/_generated/dataModel';
 import FileCardActions from './FileCardActions';
 
-type Props = { file: Doc<'files'> };
+type Props = { file: Doc<'files'> & { url?: string } };
 
 const typeIcons = {
   image: <ImageIcon />,
@@ -34,11 +35,20 @@ const FileCard = ({ file }: Props) => {
         </div>
       </CardHeader>
       <CardContent className="h-[200px] flex justify-center items-center">
+        {file.type === 'image' && file.url && (
+          <Image alt={file.name} width="200" height="100" src={file.url} />
+        )}
         {file.type === 'csv' && <GanttChartIcon className="w-20 h-20" />}
         {file.type === 'pdf' && <FileTextIcon className="w-20 h-20" />}
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button>Download</Button>
+        <Button
+          onClick={() => {
+            window.open(file.url);
+          }}
+        >
+          Download
+        </Button>
       </CardFooter>
     </Card>
   );
