@@ -13,7 +13,7 @@ import { ReactNode } from 'react';
 import { Doc } from '../../../../convex/_generated/dataModel';
 import FileCardActions from './FileCardActions';
 
-type Props = { file: Doc<'files'> & { url?: string } };
+type Props = { file: Doc<'files'> & { url: string | null } };
 
 const typeIcons = {
   image: <ImageIcon />,
