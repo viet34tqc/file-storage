@@ -5,7 +5,7 @@ import { useQuery } from 'convex/react';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { api } from '../../../../../convex/_generated/api';
-import FileCard from '../FileCard';
+import FileCard from '../FileCard/FileCard';
 import { UploadButton } from '../UploadButton';
 import NoFiles from './NoFiles';
 import { SearchBar } from './SearchBar';

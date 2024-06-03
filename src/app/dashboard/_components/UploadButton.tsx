@@ -93,7 +93,7 @@ export function UploadButton() {
     try {
       await createFile({
         name: values.title,
-        fileId: storageId,
+        storageId,
         type: typesMap[values.file[0].type],
         orgId,
       });

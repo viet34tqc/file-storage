@@ -17,11 +17,11 @@ import {
 import { useMutation } from 'convex/react';
 
 import { useToast } from '@/components/ui/use-toast';
-import { MoreVertical, TrashIcon } from 'lucide-react';
+import { MoreVertical, StarIcon, TrashIcon } from 'lucide-react';
 import { Props } from 'next/script';
 import { useState } from 'react';
-import { api } from '../../../../convex/_generated/api';
-import { Doc } from '../../../../convex/_generated/dataModel';
+import { api } from '../../../../../convex/_generated/api';
+import { Doc } from '../../../../../convex/_generated/dataModel';
 
 type Props = {
   file: Doc<'files'>;
@@ -29,6 +29,7 @@ type Props = {
 
 const FileCardActions = ({ file }: Props) => {
   const deleteFile = useMutation(api.files.deleteFile);
+  const toggleFavorite = useMutation(api.files.toggleFavorite);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { toast } = useToast();
   return (
@@ -65,6 +66,12 @@ const FileCardActions = ({ file }: Props) => {
           <MoreVertical />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuItem
+            className="flex gap-1 text-red-600 items-center cursor-pointer"
+            onClick={() => toggleFavorite({ fileId: file._id })}
+          >
+            <StarIcon className="w-4 h-4" /> Mark as favorite
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="flex gap-1 text-red-600 items-center cursor-pointer"
             onClick={() => setIsConfirmOpen(true)}

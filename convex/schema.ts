@@ -12,8 +12,13 @@ export default defineSchema({
     name: v.string(),
     orgId: v.string(),
     type: fileTypes,
-    fileId: v.id('_storage'),
+    storageId: v.id('_storage'),
   }).index('by_orgId', ['orgId']),
+  favorites: defineTable({
+    userId: v.id('users'),
+    fileId: v.id('files'),
+    orgId: v.string(),
+  }).index('by_userId_orgId_fileId', ['userId', 'orgId', 'fileId']),
   users: defineTable({
     tokenIdentifier: v.string(),
     orgIds: v.array(v.string()),

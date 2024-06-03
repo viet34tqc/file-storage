@@ -1,4 +1,5 @@
 import { ConvexError, v } from 'convex/values';
+import { Id } from './_generated/dataModel';
 import { MutationCtx, QueryCtx, mutation, query } from './_generated/server';
 import { fileTypes } from './schema';
 import { getUser } from './users';
@@ -27,7 +28,7 @@ export const createFile = mutation({
   // args are the arguments passed to when we invoke createFile()
   args: {
     name: v.string(),
-    fileId: v.id('_storage'),
+    storageId: v.id('_storage'),
     type: fileTypes,
     orgId: v.string(),
   },
@@ -49,7 +50,7 @@ export const createFile = mutation({
       name: args.name,
       orgId: args.orgId,
       type: args.type,
-      fileId: args.fileId,
+      storageId: args.storageId,
     });
   },
 });
@@ -88,7 +89,7 @@ export const getFiles = query({
     const filesWithUrl = await Promise.all(
       files.map(async file => ({
         ...file,
-        url: await ctx.storage.getUrl(file.fileId),
+        url: await ctx.storage.getUrl(file.storageId),
       }))
     );
 
@@ -111,25 +112,82 @@ export const deleteFile = mutation({
     fileId: v.id('files'),
   },
   async handler(ctx, args) {
-    const identity = await ctx.auth.getUserIdentity();
+    const fileAndUser = await getFileBelongToUser(ctx, args.fileId);
 
-    if (!identity) {
-      throw new ConvexError('you must be logged in to upload a file');
+    if (!fileAndUser) {
+      throw new ConvexError('Cannot access to the file');
     }
-    const file = await ctx.db.get(args.fileId);
-    if (!file) throw new ConvexError('File does not exist');
-
-    // Because each file belongs to an org, we need to check if the user has access to that org
-    const hasAccess = await hasAccessToOrg(
-      ctx,
-      identity.tokenIdentifier,
-      file.orgId
-    );
-
-    if (!hasAccess) {
-      throw new ConvexError('You do not have access to delete the file');
-    }
-
     await ctx.db.delete(args.fileId);
   },
 });
+
+export const toggleFavorite = mutation({
+  args: {
+    fileId: v.id('files'),
+  },
+  async handler(ctx, args) {
+    const fileAndUser = await getFileBelongToUser(ctx, args.fileId);
+
+    if (!fileAndUser) {
+      throw new ConvexError('Cannot access to the file');
+    }
+
+    const { file, user } = fileAndUser;
+
+    const favorites = await ctx.db
+      .query('favorites')
+      .withIndex('by_userId_orgId_fileId', q =>
+        q.eq('userId', user._id).eq('orgId', file.orgId).eq('fileId', file._id)
+      )
+      .first();
+
+    if (!favorites) {
+      await ctx.db.insert('favorites', {
+        fileId: file._id,
+        orgId: file.orgId,
+        userId: user._id,
+      });
+    } else {
+      await ctx.db.delete(favorites._id);
+    }
+  },
+});
+
+async function getFileBelongToUser(
+  ctx: MutationCtx | QueryCtx,
+  fileId: Id<'files'>
+) {
+  const identity = await ctx.auth.getUserIdentity();
+
+  if (!identity) {
+    return null;
+  }
+  const file = await ctx.db.get(fileId);
+  if (!file) {
+    return null;
+  }
+
+  // Because each file belongs to an org, we need to check if the user has access to that org
+  const hasAccess = await hasAccessToOrg(
+    ctx,
+    identity.tokenIdentifier,
+    file.orgId
+  );
+
+  if (!hasAccess) {
+    return null;
+  }
+
+  const user = await ctx.db
+    .query('users')
+    .withIndex('by_tokenIdentifier', q =>
+      q.eq('tokenIdentifier', identity.tokenIdentifier)
+    )
+    .first();
+
+  if (!user) {
+    return null;
+  }
+
+  return { file, user };
+}

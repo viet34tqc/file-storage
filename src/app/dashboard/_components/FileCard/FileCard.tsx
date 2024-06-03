@@ -10,7 +10,7 @@ import {
 import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { ReactNode } from 'react';
-import { Doc } from '../../../../convex/_generated/dataModel';
+import { Doc } from '../../../../../convex/_generated/dataModel';
 import FileCardActions from './FileCardActions';
 
 type Props = { file: Doc<'files'> & { url: string | null } };
@@ -44,7 +44,9 @@ const FileCard = ({ file }: Props) => {
       <CardFooter className="flex justify-between">
         <Button
           onClick={() => {
-            window.open(file.url);
+            if (file.url) {
+              window.open(file.url);
+            }
           }}
         >
           Download
