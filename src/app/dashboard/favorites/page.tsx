@@ -1,7 +1,11 @@
-type Props = {};
+'use client';
 
-const FavoritesPage = (props: Props) => {
-  return <div>Favorite Page</div>;
-};
+import FileBrowser from '../_components/FileBrowser';
 
-export default FavoritesPage;
+export default function FavoritesPage() {
+  return (
+    <div>
+      <FileBrowser title="Favorites" />
+    </div>
+  );
+}

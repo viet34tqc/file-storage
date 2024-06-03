@@ -9,6 +9,7 @@ import FileCard from '../FileCard/FileCard';
 import { UploadButton } from '../UploadButton';
 import NoFiles from './NoFiles';
 import { SearchBar } from './SearchBar';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   title: string;
@@ -19,7 +20,8 @@ const FileBrowser = ({ title }: Props) => {
   const organization = useOrganization();
   const user = useUser();
   const orgId = organization?.organization?.id ?? user?.user?.id;
-  const files = useQuery(api.files.getFiles, orgId ? { orgId, query } : 'skip'); // If we can't get the orgId or userId, skip the query
+  const pathName = usePathname();
+  const files = useQuery(api.files.getFiles, orgId ? { orgId, query, pathName } : 'skip'); // If we can't get the orgId or userId, skip the query
   const isLoadingFiles = files === undefined;
   return (
     <div>

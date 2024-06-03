@@ -11,7 +11,7 @@ import { getUser } from './users';
 // Therefore, we need to get the orgId from the user
 // Default identity lacks of the organization id, so we have to do it on our own.
 
-export const hasAccessToOrg = async (
+export const getUserBelongToOrg = async (
   ctx: MutationCtx | QueryCtx,
   tokenIdentifier: string,
   orgId: string
@@ -21,7 +21,8 @@ export const hasAccessToOrg = async (
   // orgId can be either the orgId or the userId (this userId is included in tokenIdentifier)
   const hasAccess =
     user.orgIds.includes(orgId) || user.tokenIdentifier.includes(orgId);
-  return hasAccess;
+  if (!hasAccess) return null;
+  return { user };
 };
 
 export const createFile = mutation({
@@ -38,12 +39,12 @@ export const createFile = mutation({
       throw new ConvexError('logged in please');
     }
 
-    const hasAccess = await hasAccessToOrg(
+    const userBelongToOrg = await getUserBelongToOrg(
       ctx,
       identity.tokenIdentifier,
       args.orgId
     );
-    if (!hasAccess) {
+    if (!userBelongToOrg) {
       throw new ConvexError('You are not allow to do this');
     }
     await ctx.db.insert('files', {
@@ -59,6 +60,7 @@ export const getFiles = query({
   args: {
     orgId: v.string(),
     query: v.string(),
+    pathName: v.string(),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
@@ -67,12 +69,12 @@ export const getFiles = query({
     }
     // We are getting files by orgId
     // So we need to check if the logged in user has access to that org
-    const hasAccess = await hasAccessToOrg(
+    const userBelongToOrg = await getUserBelongToOrg(
       ctx,
       identity.tokenIdentifier,
       args.orgId
     );
-    if (!hasAccess) {
+    if (!userBelongToOrg) {
       return [];
     }
     let files = await ctx.db
@@ -84,6 +86,16 @@ export const getFiles = query({
       files = files.filter(file =>
         file.name.toLowerCase().includes(args.query.toLowerCase())
       );
+    }
+
+    if (args.pathName.includes('favorites')) {
+      const favorites = await ctx.db
+        .query('favorites')
+        .withIndex('by_userId_orgId_fileId', q =>
+          q.eq('userId', userBelongToOrg.user._id).eq('orgId', args.orgId)
+        )
+        .collect();
+      files = files.filter(file => favorites.some(f => f.fileId === file._id));
     }
 
     const filesWithUrl = await Promise.all(
@@ -168,13 +180,13 @@ async function getFileBelongToUser(
   }
 
   // Because each file belongs to an org, we need to check if the user has access to that org
-  const hasAccess = await hasAccessToOrg(
+  const userBelongToOrg = await getUserBelongToOrg(
     ctx,
     identity.tokenIdentifier,
     file.orgId
   );
 
-  if (!hasAccess) {
+  if (!userBelongToOrg) {
     return null;
   }
 
