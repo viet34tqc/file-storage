@@ -2,7 +2,6 @@ import { ConvexError, v } from 'convex/values';
 import { Id } from './_generated/dataModel';
 import { MutationCtx, QueryCtx, mutation, query } from './_generated/server';
 import { fileTypes } from './schema';
-import { getUser } from './users';
 
 // This is where we interact with server (GET, POST)
 // We are defining mutations function for POST request
@@ -13,10 +12,23 @@ import { getUser } from './users';
 
 export const getUserBelongToOrg = async (
   ctx: MutationCtx | QueryCtx,
-  tokenIdentifier: string,
   orgId: string
 ) => {
-  const user = await getUser(ctx, tokenIdentifier);
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) {
+    return null;
+  }
+
+  const user = await ctx.db
+    .query('users')
+    .withIndex('by_tokenIdentifier', q =>
+      q.eq('tokenIdentifier', identity.tokenIdentifier)
+    )
+    .first();
+
+  if (!user) {
+    return null;
+  }
 
   // orgId can be either the orgId or the userId (this userId is included in tokenIdentifier)
   const hasAccess =
@@ -34,16 +46,7 @@ export const createFile = mutation({
     orgId: v.string(),
   },
   async handler(ctx, args) {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new ConvexError('logged in please');
-    }
-
-    const userBelongToOrg = await getUserBelongToOrg(
-      ctx,
-      identity.tokenIdentifier,
-      args.orgId
-    );
+    const userBelongToOrg = await getUserBelongToOrg(ctx, args.orgId);
     if (!userBelongToOrg) {
       throw new ConvexError('You are not allow to do this');
     }
@@ -63,17 +66,9 @@ export const getFiles = query({
     pathName: v.string(),
   },
   async handler(ctx, args) {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      return [];
-    }
     // We are getting files by orgId
     // So we need to check if the logged in user has access to that org
-    const userBelongToOrg = await getUserBelongToOrg(
-      ctx,
-      identity.tokenIdentifier,
-      args.orgId
-    );
+    const userBelongToOrg = await getUserBelongToOrg(ctx, args.orgId);
     if (!userBelongToOrg) {
       return [];
     }
@@ -165,41 +160,42 @@ export const toggleFavorite = mutation({
   },
 });
 
+export const getAllFavorites = query({
+  args: {
+    orgId: v.string(),
+  },
+  async handler(ctx, args) {
+    const userBelongToOrg = await getUserBelongToOrg(ctx, args.orgId);
+    if (!userBelongToOrg) {
+      return [];
+    }
+
+    const favorites = await ctx.db
+      .query('favorites')
+      .withIndex('by_userId_orgId_fileId', q =>
+        q.eq('userId', userBelongToOrg.user._id).eq('orgId', args.orgId)
+      )
+      .collect();
+
+    return favorites;
+  },
+});
+
 async function getFileBelongToUser(
   ctx: MutationCtx | QueryCtx,
   fileId: Id<'files'>
 ) {
-  const identity = await ctx.auth.getUserIdentity();
-
-  if (!identity) {
-    return null;
-  }
   const file = await ctx.db.get(fileId);
   if (!file) {
     return null;
   }
 
   // Because each file belongs to an org, we need to check if the user has access to that org
-  const userBelongToOrg = await getUserBelongToOrg(
-    ctx,
-    identity.tokenIdentifier,
-    file.orgId
-  );
+  const userBelongToOrg = await getUserBelongToOrg(ctx, file.orgId);
 
   if (!userBelongToOrg) {
     return null;
   }
 
-  const user = await ctx.db
-    .query('users')
-    .withIndex('by_tokenIdentifier', q =>
-      q.eq('tokenIdentifier', identity.tokenIdentifier)
-    )
-    .first();
-
-  if (!user) {
-    return null;
-  }
-
-  return { file, user };
+  return { file, user: userBelongToOrg.user };
 }

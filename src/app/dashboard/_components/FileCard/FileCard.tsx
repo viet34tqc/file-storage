@@ -13,7 +13,9 @@ import { ReactNode } from 'react';
 import { Doc } from '../../../../../convex/_generated/dataModel';
 import FileCardActions from './FileCardActions';
 
-type Props = { file: Doc<'files'> & { url: string | null } };
+type Props = {
+  file: Doc<'files'> & { url: string | null; isFavorited: boolean };
+};
 
 const typeIcons = {
   image: <ImageIcon />,
@@ -31,7 +33,7 @@ const FileCard = ({ file }: Props) => {
         </CardTitle>
         <CardDescription>Deploy your new project in one-click.</CardDescription>
         <div className="absolute top-2 right-2">
-          <FileCardActions file={file} />
+          <FileCardActions file={file} isFavorited={file.isFavorited} />
         </div>
       </CardHeader>
       <CardContent className="h-[200px] flex justify-center items-center">
