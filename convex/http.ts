@@ -37,10 +37,19 @@ http.route({
             tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.id}`,
           });
           break;
-        case 'organization.created':
+        // `organizationMembership.created` will be triggered when an user create an organization or an member is added to an organization
+        case 'organizationMembership.created':
           await ctx.runMutation(internal.users.addOrgIdToUser, {
-            tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.created_by}`,
-            orgId: result.data.id,
+            tokenIdentifier: `${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
+            orgId: result.data.organization.id,
+            role: result.data.role === 'org:admin' ? 'admin' : 'member',
+          });
+          break;
+        case 'organizationMembership.updated':
+          await ctx.runMutation(internal.users.updateRoleInOrgForUser, {
+            tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.public_user_data.user_id}`,
+            orgId: result.data.organization.id,
+            role: result.data.role === 'org:admin' ? 'admin' : 'member',
           });
           break;
       }
@@ -55,6 +64,5 @@ http.route({
     }
   }),
 });
-
 
 export default http;

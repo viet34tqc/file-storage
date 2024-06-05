@@ -1,5 +1,5 @@
 import { ConvexError, v } from 'convex/values';
-import { Id } from './_generated/dataModel';
+import { Doc, Id } from './_generated/dataModel';
 import { MutationCtx, QueryCtx, mutation, query } from './_generated/server';
 import { fileTypes } from './schema';
 
@@ -32,7 +32,8 @@ export const getUserBelongToOrg = async (
 
   // orgId can be either the orgId or the userId (this userId is included in tokenIdentifier)
   const hasAccess =
-    user.orgIds.includes(orgId) || user.tokenIdentifier.includes(orgId);
+    user.orgIds.some(item => item.orgId === orgId) ||
+    user.tokenIdentifier.includes(orgId);
   if (!hasAccess) return null;
   return { user };
 };
@@ -48,13 +49,14 @@ export const createFile = mutation({
   async handler(ctx, args) {
     const userBelongToOrg = await getUserBelongToOrg(ctx, args.orgId);
     if (!userBelongToOrg) {
-      throw new ConvexError('You are not allow to do this');
+      throw new ConvexError('You do not belong to the organization');
     }
     await ctx.db.insert('files', {
       name: args.name,
       orgId: args.orgId,
       type: args.type,
       storageId: args.storageId,
+      userId: userBelongToOrg.user._id,
     });
   },
 });
@@ -124,7 +126,10 @@ export const deleteFile = mutation({
     if (!fileAndUser) {
       throw new ConvexError('Cannot access to the file');
     }
-    await ctx.db.delete(args.fileId);
+
+    if (canModifyFile(fileAndUser)) {
+      await ctx.db.delete(args.fileId);
+    }
   },
 });
 
@@ -198,4 +203,20 @@ async function getFileBelongToUser(
   }
 
   return { file, user: userBelongToOrg.user };
+}
+
+function canModifyFile({
+  user,
+  file,
+}: {
+  user: Doc<'users'>;
+  file: Doc<'files'>;
+}) {
+  const canModifyFile =
+    user.orgIds.find(org => org.orgId === file.orgId)?.role === 'admin';
+
+  if (!canModifyFile) {
+    throw new ConvexError('You have no access to modify or delete this file');
+  }
+  return true;
 }

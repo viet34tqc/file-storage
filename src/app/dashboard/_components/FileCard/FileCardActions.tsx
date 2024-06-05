@@ -17,7 +17,8 @@ import {
 import { useMutation } from 'convex/react';
 
 import { useToast } from '@/components/ui/use-toast';
-import { MoreVertical, StarHalf, StarIcon, TrashIcon } from 'lucide-react';
+import { Protect } from '@clerk/nextjs';
+import { MoreVertical, StarIcon, TrashIcon } from 'lucide-react';
 import { useState } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import { Doc } from '../../../../../convex/_generated/dataModel';
@@ -47,12 +48,21 @@ const FileCardActions = ({ file, isFavorited }: Props) => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
-                await deleteFile({ fileId: file._id });
-                toast({
-                  variant: 'default',
-                  title: 'File marked for deletion',
-                  description: 'Your file will be deleted soon',
-                });
+                try {
+                  await deleteFile({ fileId: file._id });
+                  toast({
+                    variant: 'default',
+                    title: 'File marked for deletion',
+                    description: 'Your file will be deleted soon',
+                  });
+                } catch (error) {
+                  toast({
+                    variant: 'destructive',
+                    title: 'File marked for deletion',
+                    description:
+                      (error as Error)?.message ?? 'Cannot delete the file',
+                  });
+                }
               }}
             >
               Continue
@@ -71,23 +81,18 @@ const FileCardActions = ({ file, isFavorited }: Props) => {
             onClick={() => toggleFavorite({ fileId: file._id })}
           >
             <div className="flex gap-1 items-center">
-              {isFavorited ? (
-                <>
-                  <StarIcon className="w-4 h-4" /> Unfavorite
-                </>
-              ) : (
-                <>
-                  <StarHalf className="w-4 h-4" /> Favorite
-                </>
-              )}
+              <StarIcon className="w-4 h-4" />{' '}
+              {isFavorited ? 'Unfavorite' : 'Favorite'}
             </div>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex gap-1 text-red-600 items-center cursor-pointer"
-            onClick={() => setIsConfirmOpen(true)}
-          >
-            <TrashIcon className="w-4 h-4" /> Delete
-          </DropdownMenuItem>
+          <Protect role="org:admin" fallback={<></>}>
+            <DropdownMenuItem
+              className="flex gap-1 text-red-600 items-center cursor-pointer"
+              onClick={() => setIsConfirmOpen(true)}
+            >
+              <TrashIcon className="w-4 h-4" /> Delete
+            </DropdownMenuItem>
+          </Protect>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

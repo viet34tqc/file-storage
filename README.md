@@ -26,6 +26,15 @@ This is a demo where I want to try new libraries: for authentication and data st
 
 ## Features
 
+### Authentication
+
+This is the default feature of Clerk
+
+- An user can login via email or social medias (Facebook, Github)
+- Once logged in, user can create a organization and will be the admin of that organization by default
+- Admin can send invitation to other users. User can have role of 'admin' or 'user'
+- An user can join in multiple organization and an organization can have multiple users
+
 ### Convex and Clerk Authentication
 
 This feature is setup in `auth.config.ts`. For further information, go to <https://docs.convex.dev/auth/clerk>.
@@ -40,8 +49,13 @@ The flow is as follows: Trigger Clerk event (create, update user...) => send POS
 
 The definition of Convex HTTP actions is in 'http.ts' file
 
-### Upload file with Convex
+### Upload, delete file
 
 Convex allow us to store uploaded file. First, we upload files to Convex. Each file have a `storage id` which is the value for `fileId` field of `files` schema.
 
 A file URL can be generated from a storage ID by the `storage.getUrl` (I'm calling it in the `getFiles.ts`)
+
+In an organization:
+
+- Admin can delete and upload file
+- Member can upload file only
