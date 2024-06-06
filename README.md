@@ -59,3 +59,7 @@ In an organization:
 
 - Admin can delete and upload file
 - Member can upload file only
+
+### File deletion cronjob
+
+If files are in the trash, they will be deleted in one minute, periodically.
