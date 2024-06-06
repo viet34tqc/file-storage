@@ -16,6 +16,7 @@ export default defineSchema({
     type: fileTypes,
     storageId: v.id('_storage'),
     userId: v.id('users'),
+    isDeleted: v.optional(v.boolean()),
   }).index('by_orgId', ['orgId']),
   // We need userId and orgId columns because a file can be markes as favorite by multiple users from multiple organizations
   favorites: defineTable({

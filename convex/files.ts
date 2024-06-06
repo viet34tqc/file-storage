@@ -93,6 +93,10 @@ export const getFiles = query({
         )
         .collect();
       files = files.filter(file => favorites.some(f => f.fileId === file._id));
+    } else if (args.pathName.includes('trash')) {
+      files = files.filter(file => file.isDeleted);
+    } else {
+      files = files.filter(file => !file.isDeleted);
     }
 
     const filesWithUrl = await Promise.all(
@@ -128,7 +132,28 @@ export const deleteFile = mutation({
     }
 
     if (canModifyFile(fileAndUser)) {
-      await ctx.db.delete(args.fileId);
+      await ctx.db.patch(args.fileId, {
+        isDeleted: true,
+      });
+    }
+  },
+});
+
+export const restoreFile = mutation({
+  args: {
+    fileId: v.id('files'),
+  },
+  async handler(ctx, args) {
+    const fileAndUser = await getFileBelongToUser(ctx, args.fileId);
+
+    if (!fileAndUser) {
+      throw new ConvexError('Cannot access to the file');
+    }
+
+    if (canModifyFile(fileAndUser)) {
+      await ctx.db.patch(args.fileId, {
+        isDeleted: false,
+      });
     }
   },
 });

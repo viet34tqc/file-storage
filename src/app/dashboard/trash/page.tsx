@@ -1,7 +1,11 @@
-type Props = {};
+'use client';
 
-const TrashPage = (props: Props) => {
-  return <div>Trash page</div>;
-};
+import FileBrowser from '../_components/FileBrowser';
 
-export default TrashPage;
+export default function TrashPage() {
+  return (
+    <div>
+      <FileBrowser title="Trash" />
+    </div>
+  );
+}
