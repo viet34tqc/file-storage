@@ -38,7 +38,7 @@ export const getUserBelongToOrg = async (
 
   // orgId can be either the orgId or the userId (this userId is included in tokenIdentifier)
   const hasAccess =
-    user.orgIds.some(item => item.orgId === orgId) ||
+    user.orgs.some(item => item.orgId === orgId) ||
     user.tokenIdentifier.includes(orgId);
   if (!hasAccess) return null;
   return { user };
@@ -261,7 +261,7 @@ function canModifyFile({
   file: Doc<'files'>;
 }) {
   const canModifyFile =
-    user.orgIds.find(org => org.orgId === file.orgId)?.role === 'admin';
+    user.orgs.find(org => org.orgId === file.orgId)?.role === 'admin';
 
   if (!canModifyFile) {
     throw new ConvexError('You have no access to modify or delete this file');

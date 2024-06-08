@@ -18,17 +18,22 @@ import { useMutation } from 'convex/react';
 
 import { useToast } from '@/components/ui/use-toast';
 import { Protect } from '@clerk/nextjs';
-import { MoreVertical, StarIcon, TrashIcon, Undo2Icon, UndoIcon } from 'lucide-react';
+import {
+  FileIcon,
+  MoreVertical,
+  StarIcon,
+  TrashIcon,
+  UndoIcon,
+} from 'lucide-react';
 import { useState } from 'react';
 import { api } from '../../../../../convex/_generated/api';
-import { Doc } from '../../../../../convex/_generated/dataModel';
+import { File } from '../../_types';
 
 type Props = {
-  file: Doc<'files'>;
-  isFavorited: boolean;
+  file: File;
 };
 
-const FileCardActions = ({ file, isFavorited }: Props) => {
+const FileCardActions = ({ file }: Props) => {
   const deleteFile = useMutation(api.files.deleteFile);
   const restoreFile = useMutation(api.files.restoreFile);
   const toggleFavorite = useMutation(api.files.toggleFavorite);
@@ -78,12 +83,21 @@ const FileCardActions = ({ file, isFavorited }: Props) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem
+            onClick={() => {
+              if (!file.url) return;
+              window.open(file.url, '_blank');
+            }}
+            className="flex gap-1 items-center cursor-pointer"
+          >
+            <FileIcon className="w-4 h-4" /> Download
+          </DropdownMenuItem>
+          <DropdownMenuItem
             className="flex gap-1 text-red-600 items-center cursor-pointer"
             onClick={() => toggleFavorite({ fileId: file._id })}
           >
             <div className="flex gap-1 items-center">
               <StarIcon className="w-4 h-4" />{' '}
-              {isFavorited ? 'Unfavorite' : 'Favorite'}
+              {file.isFavorited ? 'Unfavorite' : 'Favorite'}
             </div>
           </DropdownMenuItem>
           <Protect role="org:admin" fallback={<></>}>

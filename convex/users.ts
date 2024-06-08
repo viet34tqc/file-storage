@@ -1,5 +1,10 @@
 import { ConvexError, v } from 'convex/values';
-import { MutationCtx, QueryCtx, internalMutation } from './_generated/server';
+import {
+  MutationCtx,
+  QueryCtx,
+  internalMutation,
+  query,
+} from './_generated/server';
 import { roles } from './schema';
 
 export const getUser = async (
@@ -23,11 +28,36 @@ export const getUser = async (
 export const createUser = internalMutation({
   args: {
     tokenIdentifier: v.string(),
+    name: v.string(),
+    image: v.string(),
   },
   handler: async (ctx, args) => {
     await ctx.db.insert('users', {
       tokenIdentifier: args.tokenIdentifier,
-      orgIds: [], // This is an empty array, we will fill it later with addOrgIdToUser mutation
+      name: args.name,
+      image: args.image,
+      orgs: [], // This is an empty array, we will fill it later with addOrgIdToUser mutation
+    });
+  },
+});
+
+export const updateUser = internalMutation({
+  args: { tokenIdentifier: v.string(), name: v.string(), image: v.string() },
+  async handler(ctx, args) {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_tokenIdentifier', q =>
+        q.eq('tokenIdentifier', args.tokenIdentifier)
+      )
+      .first();
+
+    if (!user) {
+      throw new ConvexError('no user with this token found');
+    }
+
+    await ctx.db.patch(user._id, {
+      name: args.name,
+      image: args.image,
     });
   },
 });
@@ -44,7 +74,7 @@ export const addOrgIdToUser = internalMutation({
     const user = await getUser(ctx, args.tokenIdentifier);
     await ctx.db.patch(user._id, {
       tokenIdentifier: args.tokenIdentifier,
-      orgIds: [...user.orgIds, { orgId: args.orgId, role: args.role }],
+      orgs: [...user.orgs, { orgId: args.orgId, role: args.role }],
     });
   },
 });
@@ -54,7 +84,7 @@ export const updateRoleInOrgForUser = internalMutation({
   async handler(ctx, args) {
     const user = await getUser(ctx, args.tokenIdentifier);
 
-    const org = user.orgIds.find(org => org.orgId === args.orgId);
+    const org = user.orgs.find(org => org.orgId === args.orgId);
 
     if (!org) {
       throw new ConvexError(
@@ -62,12 +92,24 @@ export const updateRoleInOrgForUser = internalMutation({
       );
     }
 
-    // Cause 'org' variable and the original org from orgIds have the same reference
+    // Cause 'org' variable and the original org from orgs have the same reference
     // So, update 'org' will update the original org as well
     org.role = args.role;
 
     await ctx.db.patch(user._id, {
-      orgIds: user.orgIds,
+      orgs: user.orgs,
     });
+  },
+});
+
+export const getUserProfile = query({
+  args: { userId: v.id('users') },
+  async handler(ctx, args) {
+    const user = await ctx.db.get(args.userId);
+
+    return {
+      name: user?.name,
+      image: user?.image,
+    };
   },
 });

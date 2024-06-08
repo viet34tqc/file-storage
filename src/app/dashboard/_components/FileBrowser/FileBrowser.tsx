@@ -45,7 +45,7 @@ const FileBrowser = ({ title }: Props) => {
       {isLoadingFiles && (
         <div className="flex flex-col gap-8 w-full items-center mt-24">
           <Loader2 className="h-32 w-32 animate-spin text-gray-500" />
-          <p className="text-2xl">Loading your image</p>
+          <p className="text-2xl">Loading your files</p>
         </div>
       )}
 
