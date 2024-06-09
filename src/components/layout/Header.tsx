@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import {
   OrganizationSwitcher,
   SignInButton,
-  SignedIn,
   SignedOut,
   UserButton,
 } from '@clerk/nextjs';
@@ -19,12 +18,6 @@ export function Header() {
           <Image src="/logo.svg" width="50" height="50" alt="file drive logo" />
           File Storage
         </Link>
-
-        <SignedIn>
-          <Button variant={'outline'}>
-            <Link href="/dashboard/files">Your Files</Link>
-          </Button>
-        </SignedIn>
 
         <div className="flex gap-2">
           <OrganizationSwitcher />

@@ -80,6 +80,8 @@ export const getFiles = query({
     if (!userBelongToOrg) {
       return [];
     }
+
+    // This will display all the files in the organization (both from other user)
     let files = await ctx.db
       .query('files')
       .withIndex('by_orgId', q => q.eq('orgId', args.orgId))

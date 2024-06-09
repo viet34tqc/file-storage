@@ -12,10 +12,10 @@ export default function DashboardLayout({
 }>) {
   return (
     <main className="container mx-auto pt-12 min-h-screen">
-      <div className="flex gap-8">
+      <div className="flex flex-wrap gap-8">
         <SideBar />
 
-        <div className="w-full">{children}</div>
+        <div className="flex-1">{children}</div>
       </div>
     </main>
   );

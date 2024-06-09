@@ -10,7 +10,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="w-40 flex flex-col gap-4">
+    <div className="sm:w-40 flex sm:flex-col sm:gap-4 gap-2 flex-wrap">
       <Link href="/dashboard/files">
         <Button
           variant={'link'}
