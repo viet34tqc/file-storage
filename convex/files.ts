@@ -265,7 +265,9 @@ function canModifyFile({
   user: Doc<'users'>;
   file: Doc<'files'>;
 }) {
+  // Only admin or the author of the file have the delete permission
   const canModifyFile =
+    file.userId === user._id ||
     user.orgs.find(org => org.orgId === file.orgId)?.role === 'admin';
 
   if (!canModifyFile) {

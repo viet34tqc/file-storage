@@ -68,8 +68,10 @@ const columns: ColumnDef<File>[] = [
   },
 ];
 
+type FileType = Doc<'files'>['type'] | 'all';
+
 const FileBrowser = ({ title }: Props) => {
-  const [type, setType] = useState<Doc<'files'>['type'] | 'all'>('all');
+  const [type, setType] = useState<FileType>('all');
 
   const [query, setQuery] = useState('');
   const organization = useOrganization();
@@ -124,7 +126,7 @@ const FileBrowser = ({ title }: Props) => {
             <Select
               value={type}
               onValueChange={newType => {
-                setType(newType as any);
+                setType(newType as FileType);
               }}
             >
               <SelectTrigger id="type-select" className="w-[180px]">

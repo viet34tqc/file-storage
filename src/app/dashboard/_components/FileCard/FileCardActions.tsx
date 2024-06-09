@@ -14,10 +14,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 
 import { useToast } from '@/components/ui/use-toast';
 import { Protect } from '@clerk/nextjs';
+import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import {
   FileIcon,
   MoreVertical,
@@ -39,6 +40,8 @@ const FileCardActions = ({ file }: Props) => {
   const toggleFavorite = useMutation(api.files.toggleFavorite);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const { toast } = useToast();
+  const me = useQuery(api.users.getMe);
+
   return (
     <>
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
@@ -100,7 +103,17 @@ const FileCardActions = ({ file }: Props) => {
               {file.isFavorited ? 'Unfavorite' : 'Favorite'}
             </div>
           </DropdownMenuItem>
-          <Protect role="org:admin" fallback={<></>}>
+
+          {/* Only admin or the author of the file have the delete permission */}
+          <Protect
+            condition={check =>
+              check({
+                role: 'admin',
+              }) || file.userId === me?._id
+            }
+            fallback={<></>}
+          >
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               className="flex gap-1 text-red-600 items-center cursor-pointer"
               onClick={() => {
