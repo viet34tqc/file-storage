@@ -8,8 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useOrganization, useUser } from '@clerk/nextjs';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import { ColumnDef } from '@tanstack/react-table';
 import { useQuery } from 'convex/react';
 import { formatRelative } from 'date-fns';
@@ -69,6 +69,8 @@ const columns: ColumnDef<File>[] = [
 ];
 
 const FileBrowser = ({ title }: Props) => {
+  const [type, setType] = useState<Doc<'files'>['type'] | 'all'>('all');
+
   const [query, setQuery] = useState('');
   const organization = useOrganization();
   const user = useUser();
@@ -76,7 +78,9 @@ const FileBrowser = ({ title }: Props) => {
   const pathName = usePathname();
   const files = useQuery(
     api.files.getFiles,
-    orgId ? { orgId, query, pathName } : 'skip'
+    orgId
+      ? { orgId, query, pathName, type: type === 'all' ? undefined : type }
+      : 'skip'
   ); // If we can't get the orgId or userId, skip the query
   const isLoadingFiles = files === undefined;
 
@@ -93,7 +97,6 @@ const FileBrowser = ({ title }: Props) => {
       ),
     })) ?? [];
 
-  const [type, setType] = useState<Doc<'files'>['type'] | 'all'>('all');
   return (
     <div>
       <div className="flex justify-between items-center mb-12 flex-wrap gap-2">
@@ -106,7 +109,7 @@ const FileBrowser = ({ title }: Props) => {
 
       <Tabs defaultValue="grid">
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-          <TabsList className="flex gap-4 ">
+          <TabsList className="h-12">
             <TabsTrigger value="grid" className="flex gap-2 items-center">
               <GridIcon />
               Grid

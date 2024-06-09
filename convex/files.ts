@@ -72,6 +72,7 @@ export const getFiles = query({
     orgId: v.string(),
     query: v.string(),
     pathName: v.string(),
+    type: v.optional(fileTypes),
   },
   async handler(ctx, args) {
     // We are getting files by orgId
@@ -103,6 +104,8 @@ export const getFiles = query({
       files = files.filter(file => favorites.some(f => f.fileId === file._id));
     } else if (args.pathName.includes('trash')) {
       files = files.filter(file => file.isDeleted);
+    } else if (args.type) {
+      files = files.filter(file => file.type === args.type);
     } else {
       files = files.filter(file => !file.isDeleted);
     }
