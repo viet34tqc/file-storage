@@ -50,7 +50,7 @@ const FileCard = ({ file }: Props) => {
         {file.type === 'csv' && <GanttChartIcon className="w-20 h-20" />}
         {file.type === 'pdf' && <FileTextIcon className="w-20 h-20" />}
       </CardContent>
-      <CardFooter className="flex justify-between text-xs text-gray-700">
+      <CardFooter className="flex justify-between text-xs text-gray-700 gap-1">
         <div className="flex gap-2 w-40 items-center">
           <Avatar className="w-6 h-6">
             <AvatarImage src={userProfile?.image} />

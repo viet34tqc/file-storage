@@ -1,3 +1,4 @@
+import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
@@ -22,8 +23,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ConvexClientProvider>
           <Toaster />
-          <Header />
-          {children}
+          <div className="flex flex-col">
+            <Header />
+            {children}
+            <Footer />
+          </div>
         </ConvexClientProvider>
       </body>
     </html>

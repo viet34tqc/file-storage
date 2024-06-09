@@ -150,7 +150,7 @@ const FileBrowser = ({ title }: Props) => {
         )}
 
         <TabsContent value="grid">
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {filesWithIsFavoritedAttribute?.map(file => {
               return <FileCard key={file._id} file={file} />;
             })}

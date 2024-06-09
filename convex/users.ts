@@ -121,7 +121,6 @@ export const getMe = query({
     if (!identity) return null;
 
     const user = await getUser(ctx, identity.tokenIdentifier);
-    console.log('user', user)
 
     if (!user) {
       return null;
