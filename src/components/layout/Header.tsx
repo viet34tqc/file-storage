@@ -16,7 +16,7 @@ export function Header() {
       <div className="items-center container mx-auto justify-between flex">
         <Link href="/" className="flex gap-2 items-center text-xl text-black">
           <Image src="/logo.svg" width="64" height="64" alt="file drive logo" />
-          File Storage
+          <span className="hidden sm:block">File Storage</span>
         </Link>
 
         <div className="flex gap-2">

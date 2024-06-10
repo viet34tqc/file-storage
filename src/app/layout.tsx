@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ConvexClientProvider>
           <Toaster />
-          <div className="flex flex-col">
+          <div className="flex flex-col min-h-[100svh]">
             <Header />
             {children}
             <Footer />
