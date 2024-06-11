@@ -15,7 +15,7 @@ import { useOrganization, useUser } from '@clerk/nextjs';
 import { ColumnDef } from '@tanstack/react-table';
 import { useQuery } from 'convex/react';
 import { formatRelative } from 'date-fns';
-import { GridIcon, Loader2, RowsIcon } from 'lucide-react';
+import { GridIcon, RowsIcon } from 'lucide-react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { api } from '../../../../../convex/_generated/api';
@@ -24,6 +24,7 @@ import FileCardActions from '../FileCard/FileCardActions';
 import { FileTableCell } from '../FilesTable/FileTableCell';
 import { FilesTable } from '../FilesTable/FilesTable';
 import { UploadButton } from '../UploadButton';
+import FilesLoader from './FileLoader';
 import NoFiles from './NoFiles';
 import { SearchBar } from './SearchBar';
 
@@ -118,9 +119,7 @@ const FileBrowser = ({ title }: Props) => {
     <div>
       <div className="flex justify-between items-center mb-12 flex-wrap gap-2">
         <h1 className="text-4xl font-bold">{title}</h1>
-
         <SearchBar query={query} setQuery={setQuery} />
-
         <UploadButton />
       </div>
 
@@ -158,22 +157,26 @@ const FileBrowser = ({ title }: Props) => {
           </div>
         </div>
 
-        {isLoadingFiles && (
-          <div className="flex flex-col gap-8 w-full items-center mt-24">
-            <Loader2 className="h-32 w-32 animate-spin text-gray-500" />
-            <div className="text-2xl">Loading your files...</div>
-          </div>
-        )}
-
         <TabsContent value="grid">
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {filesWithIsFavoritedAttribute?.map(file => {
-              return <FileCard key={file._id} file={file} />;
-            })}
-          </div>
+          {isLoadingFiles ? (
+            <FilesLoader />
+          ) : (
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {filesWithIsFavoritedAttribute?.map(file => {
+                return <FileCard key={file._id} file={file} />;
+              })}
+            </div>
+          )}
         </TabsContent>
         <TabsContent value="table">
-          <FilesTable columns={columns} data={filesWithIsFavoritedAttribute} />
+          {isLoadingFiles ? (
+            <FilesLoader />
+          ) : (
+            <FilesTable
+              columns={columns}
+              data={filesWithIsFavoritedAttribute}
+            />
+          )}
         </TabsContent>
       </Tabs>
 
