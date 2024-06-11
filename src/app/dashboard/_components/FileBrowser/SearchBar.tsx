@@ -1,3 +1,4 @@
+import { useRouterPushParam } from '@/app/hooks/useRouterPushParam';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -30,9 +31,10 @@ export function SearchBar({
       query,
     },
   });
-
+  const { handlePushParam } = useRouterPushParam();
   function onSubmit(values: z.infer<typeof formSchema>) {
     setQuery(values.query);
+    handlePushParam('query', values.query);
   }
 
   return (

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouterPushParam } from '@/app/hooks/useRouterPushParam';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -9,16 +10,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { File, FileTypeAsOptionValue } from '@/lib/types';
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { ColumnDef } from '@tanstack/react-table';
 import { useQuery } from 'convex/react';
 import { formatRelative } from 'date-fns';
 import { GridIcon, Loader2, RowsIcon } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { api } from '../../../../../convex/_generated/api';
-import { Doc } from '../../../../../convex/_generated/dataModel';
-import { File } from '../../_types';
 import FileCard from '../FileCard/FileCard';
 import FileCardActions from '../FileCard/FileCardActions';
 import { FileTableCell } from '../FilesTable/FileTableCell';
@@ -68,16 +68,24 @@ const columns: ColumnDef<File>[] = [
   },
 ];
 
-type FileType = Doc<'files'>['type'] | 'all';
-
 const FileBrowser = ({ title }: Props) => {
-  const [type, setType] = useState<FileType>('all');
+  const searchParams = useSearchParams();
+  const [type, setType] = useState<FileTypeAsOptionValue>(() => {
+    const fileTypeFromSearchParam = searchParams.get('fileType');
+    if (
+      fileTypeFromSearchParam &&
+      ['all', 'image', 'csv', 'pdf'].includes(fileTypeFromSearchParam)
+    ) {
+      return fileTypeFromSearchParam as FileTypeAsOptionValue;
+    }
+    return 'all';
+  });
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(() => searchParams.get('query') ?? '');
   const organization = useOrganization();
   const user = useUser();
-  const orgId = organization?.organization?.id ?? user?.user?.id;
   const pathName = usePathname();
+  const orgId = organization?.organization?.id ?? user?.user?.id;
   const files = useQuery(
     api.files.getFiles,
     orgId
@@ -99,6 +107,13 @@ const FileBrowser = ({ title }: Props) => {
       ),
     })) ?? [];
 
+  const { handlePushParam } = useRouterPushParam();
+  const defaultView = searchParams.get('view') ?? 'grid';
+
+  const handleUpdateViewType = (value: string) => {
+    handlePushParam('view', value);
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-12 flex-wrap gap-2">
@@ -109,7 +124,7 @@ const FileBrowser = ({ title }: Props) => {
         <UploadButton />
       </div>
 
-      <Tabs defaultValue="grid">
+      <Tabs defaultValue={defaultView} onValueChange={handleUpdateViewType}>
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
           <TabsList className="h-12">
             <TabsTrigger value="grid" className="flex gap-2 items-center">
@@ -126,7 +141,8 @@ const FileBrowser = ({ title }: Props) => {
             <Select
               value={type}
               onValueChange={newType => {
-                setType(newType as FileType);
+                setType(newType as FileTypeAsOptionValue);
+                handlePushParam('fileType', newType);
               }}
             >
               <SelectTrigger id="type-select" className="w-[180px]">
