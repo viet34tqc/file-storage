@@ -1,9 +1,10 @@
+import { Suspense } from 'react';
 import FileBrowser from '../_components/FileBrowser';
 
 export default function FilesPage() {
   return (
-    <div>
+    <Suspense>
       <FileBrowser title="Your Files" />
-    </div>
+    </Suspense>
   );
 }

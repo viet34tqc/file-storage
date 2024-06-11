@@ -13,8 +13,8 @@ import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { api } from '../../../../../convex/_generated/api';
-import { File } from '../../_types';
 import FileCardActions from './FileCardActions';
+import { File } from '@/lib/types';
 
 type Props = {
   file: File;

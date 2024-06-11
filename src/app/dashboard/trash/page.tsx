@@ -1,11 +1,12 @@
 'use client';
 
+import { Suspense } from 'react';
 import FileBrowser from '../_components/FileBrowser';
 
 export default function TrashPage() {
   return (
-    <div>
+    <Suspense>
       <FileBrowser title="Trash" />
-    </div>
+    </Suspense>
   );
 }

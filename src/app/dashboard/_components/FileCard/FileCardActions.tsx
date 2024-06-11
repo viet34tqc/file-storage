@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { api } from '../../../../../convex/_generated/api';
-import { File } from '../../_types';
+import { File } from '@/lib/types';
 
 type Props = {
   file: File;
