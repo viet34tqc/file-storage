@@ -19,7 +19,7 @@ This is a demo where I want to try new libraries: for authentication and data st
   - Go to Clerk dashboard -> Webhook
   - Add Endpoint
   - Enter Endpoint URL. This is where the HTTP actions are exposed and it will be something like: `https://<your deployment name>.convex.site/clerk`. You can replace the path 'clerk' with anything you want but in this project I'm using 'clerk'. Go to <https://docs.convex.dev/functions/http-actions> for more details.
-  - Select the 'Subscribed Event' for this webhook. When an event in the list happens, Clerk will send a POST Request to this endpoint URL.
+  - Select the 'Subscribed Event' for this webhook. When an event in the list happens, Clerk will send a POST Request to this endpoint URL. Please check `organizationMembership.created`, `organizationMembership.updated`, `user.updated`, `user.created`
   - Copy Signing secret and paste it as `CLERK_WEBHOOK_SECRET` environment variable
   - Create 'CLERK_HOSTNAME' environment variable, its value can be found in 'Domain' section in Clerk dashboard
   - Go to Convex dashboard -> Settings, create `CLERK_WEBHOOK_SECRET` and `CLERK_HOSTNAME` variables with value like above
@@ -34,6 +34,10 @@ This is the default feature of Clerk
 - Once logged in, user can create a organization and will be the admin of that organization by default
 - Admin can send invitation to other users. User can have role of 'admin' or 'user'
 - An user can join in multiple organization and an organization can have multiple users
+
+### Member invitation
+
+You can add new member to your organization by sending invitation to their email. You can search for this invitation in 'spam' folder
 
 ### Convex and Clerk Authentication
 
@@ -57,9 +61,9 @@ A file URL can be generated from a storage ID by the `storage.getUrl` (I'm calli
 
 In an organization:
 
-- Admin can delete and upload file
-- Member can upload file only
+- Admin can upload file and delete all files
+- Member can upload file and delete his files only
 
 ### File deletion cronjob
 
-If files are in the trash, they will be deleted in one minute, periodically.
+If files are in the trash, they will be deleted in an hour, periodically.
