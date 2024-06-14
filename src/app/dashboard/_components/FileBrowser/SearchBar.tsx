@@ -1,5 +1,5 @@
 import { useRouterPushParam } from '@/app/hooks/useRouterPushParam';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button/button';
 import {
   Form,
   FormControl,
