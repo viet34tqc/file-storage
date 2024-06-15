@@ -4,11 +4,7 @@ import { Button } from './button';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Button',
   component: Button,
-  parameters: {
-    layout: 'centered',
-  },
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {

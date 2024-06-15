@@ -1,4 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/components/ui/avatar/avatar';
 import {
   Card,
   CardContent,
@@ -6,7 +10,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card/card';
+import { File } from '@/lib/types';
 import { useQuery } from 'convex/react';
 import { formatRelative } from 'date-fns';
 import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
@@ -14,7 +19,6 @@ import Image from 'next/image';
 import { ReactNode } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import FileCardActions from './FileCardActions';
-import { File } from '@/lib/types';
 
 type Props = {
   file: File;
