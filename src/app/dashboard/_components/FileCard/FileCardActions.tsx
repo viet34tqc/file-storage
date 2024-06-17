@@ -7,16 +7,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from '@/components/ui/alert-dialog/alert-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu/dropdown-menu';
 import { useMutation, useQuery } from 'convex/react';
 
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/toast/use-toast';
+import { File } from '@/lib/types';
 import { Protect } from '@clerk/nextjs';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 import {
@@ -28,7 +29,6 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { api } from '../../../../../convex/_generated/api';
-import { File } from '@/lib/types';
 
 type Props = {
   file: File;

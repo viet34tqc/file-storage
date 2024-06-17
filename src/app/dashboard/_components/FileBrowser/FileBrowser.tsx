@@ -8,8 +8,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@/components/ui/select/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/tabs';
 import { File, FileTypeAsOptionValue } from '@/lib/types';
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { ColumnDef } from '@tanstack/react-table';
