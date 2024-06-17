@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu/dropdown-menu';
 import { useMutation, useQuery } from 'convex/react';
 
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/toast/use-toast';
 import { File } from '@/lib/types';
 import { Protect } from '@clerk/nextjs';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';

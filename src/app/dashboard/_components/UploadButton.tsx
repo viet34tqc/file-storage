@@ -16,7 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form/form';
 import { Input } from '@/components/ui/input';
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { useMutation } from 'convex/react';
@@ -24,7 +24,7 @@ import { api } from '../../../../convex/_generated/api';
 
 import { z } from 'zod';
 
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/toast/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';

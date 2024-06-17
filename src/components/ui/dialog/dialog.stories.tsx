@@ -14,15 +14,7 @@ import {
 
 const DemoDialog = () => {
   return (
-    <Dialog
-      onOpenChange={isOpen => {
-        if (!isOpen) {
-          close();
-        } else {
-          open();
-        }
-      }}
-    >
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">Open Dialog</Button>
       </DialogTrigger>
