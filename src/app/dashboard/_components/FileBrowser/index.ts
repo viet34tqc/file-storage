@@ -1,1 +1,1 @@
-export { default } from './FileBrowser';
+export { default } from './FileBrowser'

@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react'
 
-import { Button } from '../button/button';
+import { Button } from '../button/button'
 
 import {
   Dialog,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './dialog';
+} from './dialog'
 
 const DemoDialog = () => {
   return (
@@ -33,17 +33,17 @@ const DemoDialog = () => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
 const meta: Meta = {
   component: Dialog,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof Dialog>;
+type Story = StoryObj<typeof Dialog>
 
 export const Demo: Story = {
   render: () => <DemoDialog />,
-};
+}

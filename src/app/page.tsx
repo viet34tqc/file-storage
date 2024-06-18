@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from 'next/image'
+import Link from 'next/link'
 
 // Copyright: https://tailwindui.com/components/marketing/sections/heroes
 
@@ -57,5 +57,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }

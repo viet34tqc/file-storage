@@ -1,40 +1,40 @@
-import { useRouterPushParam } from '@/app/hooks/useRouterPushParam';
-import { Button } from '@/components/ui/button/button';
+import { useRouterPushParam } from '@/app/hooks/useRouterPushParam'
+import { Button } from '@/components/ui/button/button'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '@/components/ui/form/form';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, SearchIcon } from 'lucide-react';
-import { Dispatch, SetStateAction } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+} from '@/components/ui/form/form'
+import { Input } from '@/components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Loader2, SearchIcon } from 'lucide-react'
+import { Dispatch, SetStateAction } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 const formSchema = z.object({
   query: z.string().min(0).max(200),
-});
+})
 
 export function SearchBar({
   query,
   setQuery,
 }: {
-  query: string;
-  setQuery: Dispatch<SetStateAction<string>>;
+  query: string
+  setQuery: Dispatch<SetStateAction<string>>
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       query,
     },
-  });
-  const { handlePushParam } = useRouterPushParam();
+  })
+  const { handlePushParam } = useRouterPushParam()
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setQuery(values.query);
-    handlePushParam('query', values.query);
+    setQuery(values.query)
+    handlePushParam('query', values.query)
   }
 
   return (
@@ -71,5 +71,5 @@ export function SearchBar({
         </form>
       </Form>
     </div>
-  );
+  )
 }

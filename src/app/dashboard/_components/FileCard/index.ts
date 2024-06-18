@@ -1,1 +1,1 @@
-export { default } from './FileCard';
+export { default } from './FileCard'

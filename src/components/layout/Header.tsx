@@ -1,14 +1,14 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button/button';
+import { Button } from '@/components/ui/button/button'
 import {
   OrganizationSwitcher,
   SignInButton,
   SignedOut,
   UserButton,
-} from '@clerk/nextjs';
-import Image from 'next/image';
-import Link from 'next/link';
+} from '@clerk/nextjs'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export function Header() {
   return (
@@ -30,5 +30,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  );
+  )
 }

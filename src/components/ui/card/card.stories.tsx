@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react'
 
-import { BellRing } from 'lucide-react';
+import { BellRing } from 'lucide-react'
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './card';
+} from './card'
 
 const DemoCard = () => (
   <Card className="w-[380px]">
@@ -30,16 +30,16 @@ const DemoCard = () => (
     </CardContent>
     <CardFooter>Mark all as read</CardFooter>
   </Card>
-);
+)
 
 const meta: Meta = {
   component: Card,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof Card>;
+type Story = StoryObj<typeof Card>
 
 export const Demo: Story = {
   render: () => <DemoCard />,
-};
+}

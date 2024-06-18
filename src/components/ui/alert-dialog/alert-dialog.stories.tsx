@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react'
 
-import { Button } from '../button/button';
+import { Button } from '../button/button'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,7 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from './alert-dialog';
+} from './alert-dialog'
 
 const DemoAlertDialog = () => {
   return (
@@ -33,17 +33,17 @@ const DemoAlertDialog = () => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
-};
+  )
+}
 
 const meta: Meta = {
   component: AlertDialog,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof AlertDialog>;
+type Story = StoryObj<typeof AlertDialog>
 
 export const Demo: Story = {
   render: () => <DemoAlertDialog />,
-};
+}

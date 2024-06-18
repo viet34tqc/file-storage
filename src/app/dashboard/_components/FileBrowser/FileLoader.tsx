@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react'
 
 const FilesLoader = () => {
   return (
@@ -6,7 +6,7 @@ const FilesLoader = () => {
       <Loader2 className="h-32 w-32 animate-spin text-gray-500" />
       <div className="text-2xl">Loading your files...</div>
     </div>
-  );
-};
+  )
+}
 
-export default FilesLoader;
+export default FilesLoader

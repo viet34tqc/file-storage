@@ -5,5 +5,5 @@ export function Footer() {
         File Drive &copy; {new Date().getFullYear()} by Viet Nguyen
       </div>
     </div>
-  );
+  )
 }

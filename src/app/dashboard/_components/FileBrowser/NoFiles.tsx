@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import { UploadButton } from '../UploadButton';
+import Image from 'next/image'
+import { UploadButton } from '../UploadButton'
 
-type Props = {};
+type Props = {}
 
 const NoFiles = (props: Props) => {
   return (
@@ -17,7 +17,7 @@ const NoFiles = (props: Props) => {
         <UploadButton />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NoFiles;
+export default NoFiles

@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
+import { Meta, StoryObj } from '@storybook/react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
 
 const DemoTabs = () => {
   return (
@@ -13,17 +13,17 @@ const DemoTabs = () => {
       </TabsContent>
       <TabsContent value="password">Change your password here.</TabsContent>
     </Tabs>
-  );
-};
+  )
+}
 
 const meta: Meta = {
   component: Tabs,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof Tabs>;
+type Story = StoryObj<typeof Tabs>
 
 export const Demo: Story = {
   render: () => <DemoTabs />,
-};
+}

@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button/button';
-import clsx from 'clsx';
-import { FileIcon, StarIcon, TrashIcon } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button/button'
+import clsx from 'clsx'
+import { FileIcon, StarIcon, TrashIcon } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function Sidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <div className="sm:w-40 flex sm:flex-col sm:gap-4 gap-2 flex-wrap">
@@ -43,5 +43,5 @@ export default function Sidebar() {
         </Button>
       </Link>
     </div>
-  );
+  )
 }

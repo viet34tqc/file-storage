@@ -1,7 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react'
 
-import { useState } from 'react';
-import { Button } from '../button/button';
+import { useState } from 'react'
+import { Button } from '../button/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './dropdown-menu';
+} from './dropdown-menu'
 
 const DemoDropDown = () => (
   <DropdownMenu>
@@ -25,10 +25,10 @@ const DemoDropDown = () => (
       <DropdownMenuItem>Panel</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-);
+)
 
 function DropdownWithCheckboxItemDemo() {
-  const [showStatusBar, setShowStatusBar] = useState<boolean>(true);
+  const [showStatusBar, setShowStatusBar] = useState<boolean>(true)
 
   return (
     <DropdownMenu>
@@ -48,20 +48,20 @@ function DropdownWithCheckboxItemDemo() {
         <DropdownMenuItem>Panel</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
 
 const meta: Meta = {
   component: DropdownMenu,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof DropdownMenu>;
+type Story = StoryObj<typeof DropdownMenu>
 
 export const DropdownWithSeperator: Story = {
   render: () => <DemoDropDown />,
-};
+}
 export const DropdownWithCheckboxItem: Story = {
   render: () => <DropdownWithCheckboxItemDemo />,
-};
+}

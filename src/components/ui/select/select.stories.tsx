@@ -1,11 +1,11 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './select';
+} from './select'
 
 const DemoSelect = () => {
   return (
@@ -20,17 +20,17 @@ const DemoSelect = () => {
         <SelectItem value="pdf">PDF</SelectItem>
       </SelectContent>
     </Select>
-  );
-};
+  )
+}
 
 const meta: Meta = {
   component: Select,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof Select>;
+type Story = StoryObj<typeof Select>
 
 export const Demo: Story = {
   render: () => <DemoSelect />,
-};
+}

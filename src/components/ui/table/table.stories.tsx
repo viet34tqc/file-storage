@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react'
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from './table';
+} from './table'
 
 const DemoTable = () => {
   const invoices = [
@@ -36,7 +36,7 @@ const DemoTable = () => {
       totalAmount: '$450.00',
       paymentMethod: 'Credit Card',
     },
-  ];
+  ]
 
   return (
     <Table>
@@ -50,7 +50,7 @@ const DemoTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map(invoice => (
+        {invoices.map((invoice) => (
           <TableRow key={invoice.invoice}>
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>{invoice.paymentStatus}</TableCell>
@@ -66,17 +66,17 @@ const DemoTable = () => {
         </TableRow>
       </TableFooter>
     </Table>
-  );
-};
+  )
+}
 
 const meta: Meta = {
   component: Table,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof Table>;
+type Story = StoryObj<typeof Table>
 
 export const Demo: Story = {
   render: () => <DemoTable />,
-};
+}

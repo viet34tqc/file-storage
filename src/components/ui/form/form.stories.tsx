@@ -1,9 +1,9 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Meta, StoryObj } from '@storybook/react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Button } from '../button/button';
-import { Input } from '../input';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Meta, StoryObj } from '@storybook/react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Button } from '../button/button'
+import { Input } from '../input'
 import {
   Form,
   FormControl,
@@ -12,24 +12,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from './form';
+} from './form'
 
 const DemoForm = () => {
   const formSchema = z.object({
     username: z.string().min(2, {
       message: 'Username must be at least 2 characters.',
     }),
-  });
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: '',
     },
-  });
+  })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log(values)
   }
 
   return (
@@ -57,17 +57,17 @@ const DemoForm = () => {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  );
-};
+  )
+}
 
 const meta: Meta = {
   component: Form,
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof Form>;
+type Story = StoryObj<typeof Form>
 
 export const Demo: Story = {
   render: () => <DemoForm />,
-};
+}

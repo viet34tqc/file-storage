@@ -2,7 +2,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/components/ui/avatar/avatar';
+} from '@/components/ui/avatar/avatar'
 import {
   Card,
   CardContent,
@@ -10,30 +10,30 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card/card';
-import { File } from '@/lib/types';
-import { useQuery } from 'convex/react';
-import { formatRelative } from 'date-fns';
-import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
-import Image from 'next/image';
-import { ReactNode } from 'react';
-import { api } from '../../../../../convex/_generated/api';
-import FileCardActions from './FileCardActions';
+} from '@/components/ui/card/card'
+import { File } from '@/lib/types'
+import { useQuery } from 'convex/react'
+import { formatRelative } from 'date-fns'
+import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react'
+import Image from 'next/image'
+import { ReactNode } from 'react'
+import { api } from '../../../../../convex/_generated/api'
+import FileCardActions from './FileCardActions'
 
 type Props = {
-  file: File;
-};
+  file: File
+}
 
 const typeIcons = {
   image: <ImageIcon />,
   pdf: <FileTextIcon />,
   csv: <GanttChartIcon />,
-} as Record<string, ReactNode>;
+} as Record<string, ReactNode>
 
 const FileCard = ({ file }: Props) => {
   const userProfile = useQuery(api.users.getUserProfile, {
     userId: file.userId,
-  });
+  })
 
   return (
     <Card className="relative">
@@ -67,7 +67,7 @@ const FileCard = ({ file }: Props) => {
         </span>
       </CardFooter>
     </Card>
-  );
-};
+  )
+}
 
-export default FileCard;
+export default FileCard
