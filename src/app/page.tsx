@@ -45,7 +45,9 @@ export default function Home() {
                 Get started
               </Link>
               <a
-                href="#"
+                href="https://github.com/viet34tqc/file-storage"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 Learn more <span aria-hidden="true">→</span>
