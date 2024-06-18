@@ -69,6 +69,10 @@ In an organization:
 
 If files are in the trash, they will be deleted in an hour, periodically.
 
+### Real-time update
+
+This is the default feature of Convex, it using web socket to update the data in real time. When you add, update or delete a file, the update are reflected instantly.
+
 ## What I learn after building this project
 
 - How to setup authentication with Clerk
