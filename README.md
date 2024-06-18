@@ -5,9 +5,10 @@ This is a demo where I want to try new libraries: for authentication and data st
 ## Techstack
 
 - Framework: NextJs
-- Authentication: Clerk. Alternatively, you can use 'next-auth'. I'm using it because it works well with Convex
-- Backennd service: Convex. This is all-in-one backend service: database, file storages. TODO: replace this with a self-hosted backend.
+- Authentication: Clerk. Alternatively, you can use 'next-auth'. I'm using Clerk because it works well with Convex
+- Backennd service: Convex. This is an all-in-one backend service: database, file storages. TODO: replace this with a self-hosted backend.
 - Styling: Tailwind and shadcn ui
+- Storybook: For component UI demo
 
 ## How to setup
 
@@ -67,3 +68,8 @@ In an organization:
 ### File deletion cronjob
 
 If files are in the trash, they will be deleted in an hour, periodically.
+
+## What I learn after building this project
+
+- How to setup authentication with Clerk
+- How webhook works via using Clerk event and Convex
