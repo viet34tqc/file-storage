@@ -10,7 +10,8 @@
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css} --config ./.prettierrc",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "postinstall": "husky install"
+    "prepare": "husky",
+    "postinstall": "husky init"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.9",
@@ -63,12 +64,5 @@
     "storybook": "^8.1.9",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,css}": [
-      "pnpm lint",
-      "pnpm format",
-      "git add ."
-    ]
   }
 }
