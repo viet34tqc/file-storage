@@ -1,17 +1,20 @@
-import * as React from 'react'
 import * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
+import React from 'react'
 import {
   Controller,
   ControllerProps,
   FieldPath,
   FieldValues,
   FormProvider,
+  useForm,
   useFormContext,
 } from 'react-hook-form'
 
-import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ZodType, z } from 'zod'
 
 const Form = FormProvider
 
@@ -155,6 +158,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
+      role={error ? 'alert' : undefined}
       className={cn('text-sm font-medium text-destructive', className)}
       {...props}
     >
@@ -164,13 +168,31 @@ const FormMessage = React.forwardRef<
 })
 FormMessage.displayName = 'FormMessage'
 
+const FormForTesting = <Schema extends ZodType<any, any, any>>({
+  onSubmit,
+  children,
+  schema,
+}: {
+  children: React.ReactNode
+  schema: Schema
+  onSubmit: (data: z.infer<Schema>) => void
+}) => {
+  const form = useForm({ resolver: zodResolver(schema) })
+  return (
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>{children}</form>
+    </FormProvider>
+  )
+}
+
 export {
-  useFormField,
   Form,
-  FormItem,
-  FormLabel,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
+  FormForTesting,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormField,
 }
