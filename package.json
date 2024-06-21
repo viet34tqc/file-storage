@@ -12,8 +12,7 @@
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css} --config ./.prettierrc",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky",
-    "postinstall": "husky init"
+    "prepare": "husky"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.9",
