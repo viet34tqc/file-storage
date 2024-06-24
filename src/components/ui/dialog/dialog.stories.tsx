@@ -4,6 +4,7 @@ import { Button } from '../button/button'
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -27,9 +28,11 @@ const DemoDialog = () => {
 
         <DialogFooter>
           <Button type="submit">Save changes</Button>
-          <Button variant="outline" onClick={close}>
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button variant="outline" onClick={close}>
+              Cancel
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
