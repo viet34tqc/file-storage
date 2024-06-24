@@ -37,10 +37,10 @@ const TestAlertDialog = () => (
   </AlertDialog>
 )
 
-describe('Dialog', () => {
+describe('Alert Dialog', () => {
   const user = userEvent.setup()
 
-  test('should handle basic dialog flow', async () => {
+  test('should handle basic alert dialog flow', async () => {
     render(<TestAlertDialog />)
 
     expect(screen.queryByText(titleText)).not.toBeInTheDocument()

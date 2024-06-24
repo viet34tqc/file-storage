@@ -1,33 +1,37 @@
 import { z } from 'zod'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { SubmitHandler } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { Button } from '../button/button'
 import { Input } from '../input'
 import {
   FormControl,
   FormField,
-  FormForTesting,
   FormItem,
   FormLabel,
   FormMessage,
 } from './form'
 
-describe('Form', async () => {
-  const user = userEvent.setup()
-  const testData = {
-    title: 'Hello World',
-  }
+const testData = {
+  title: 'Hello World',
+}
 
-  const schema = z.object({
-    title: z.string().min(1, 'Required'),
+const schema = z.object({
+  title: z.string().min(1, 'Required'),
+})
+
+type FieldValues = z.infer<typeof schema>
+
+const TestForm = ({ onSubmit }: { onSubmit: SubmitHandler<FieldValues> }) => {
+  const form = useForm<FieldValues>({
+    defaultValues: { title: '' },
+    resolver: zodResolver(schema),
   })
-
-  test('should render and submit a basic Form component', async () => {
-    const handleSubmit = vi.fn() as SubmitHandler<z.infer<typeof schema>>
-    render(
-      <FormForTesting onSubmit={handleSubmit} schema={schema}>
+  return (
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           name="title"
           render={({ field }) => (
@@ -43,8 +47,17 @@ describe('Form', async () => {
         <Button name="submit" type="submit" className="w-full">
           Submit
         </Button>
-      </FormForTesting>
-    )
+      </form>
+    </FormProvider>
+  )
+}
+
+describe('Form', async () => {
+  const user = userEvent.setup()
+
+  test('should render and submit a basic Form component', async () => {
+    const handleSubmit = vi.fn() as SubmitHandler<FieldValues>
+    render(<TestForm onSubmit={handleSubmit} />)
     const input = screen.getByLabelText(/title/i)
     await user.type(input, testData.title)
     await user.click(screen.getByRole('button', { name: /submit/i }))
@@ -55,26 +68,9 @@ describe('Form', async () => {
   })
 
   test('should fail submission if validation fails', async () => {
-    const handleSubmit = vi.fn() as SubmitHandler<z.infer<typeof schema>>
-    render(
-      <FormForTesting onSubmit={handleSubmit} schema={schema}>
-        <FormField
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button name="submit" type="submit" className="w-full">
-          Submit
-        </Button>
-      </FormForTesting>
-    )
+    const handleSubmit = vi.fn() as SubmitHandler<FieldValues>
+    render(<TestForm onSubmit={handleSubmit} />)
+
     await userEvent.click(screen.getByRole('button', { name: /submit/i }))
     await screen.findByRole('alert')
 
