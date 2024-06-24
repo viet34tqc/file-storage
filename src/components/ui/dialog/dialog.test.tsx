@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@radix-ui/react-dialog'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Button } from '../button/button'
 import { DialogFooter, DialogHeader } from './dialog'
@@ -48,10 +48,8 @@ describe('Dialog', () => {
 
     const cancelButton = screen.getByRole('button', { name: 'Cancel' })
 
-    user.click(cancelButton)
+    await user.click(cancelButton)
 
-    await waitFor(() =>
-      expect(screen.queryByText(titleText)).not.toBeInTheDocument()
-    )
+    expect(screen.queryByText(titleText)).not.toBeInTheDocument()
   })
 })
