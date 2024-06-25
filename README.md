@@ -1,6 +1,6 @@
 # Online file storage
 
-This is a demo where I want to try new libraries: for authentication and data storage.
+This is a demo where I want to try new libraries for authentication and data storage.
 
 ## Techstack
 
@@ -8,14 +8,14 @@ This is a demo where I want to try new libraries: for authentication and data st
 - Authentication: Clerk. Alternatively, you can use 'next-auth'. I'm using Clerk because it works well with Convex
 - Backennd service: Convex. This is an all-in-one backend service: database, file storages. TODO: replace this with a self-hosted backend.
 - Styling: Tailwind and shadcn ui
-- Storybook: For component UI demo
+- Storybook: For UI component demo
 
 ## How to setup
 
 - `pnpm install`: install the package
 - Create Convex account, then create a project
 - Run `npx convex dev` to connect to your convex database. It will also create a `.env.local` in your root directory
-- Create Clerk account, create new app then go to 'API keys', insert those keys into `.env.local`
+- Create Clerk account, create a new app then go to 'API keys', insert those keys into `.env.local`
 - Create Clerk webhook. When we trigger an event on Clerk, like create, update user, create organization, we send a request to Convex.
   - Go to Clerk dashboard -> Webhook
   - Add Endpoint
@@ -31,14 +31,14 @@ This is a demo where I want to try new libraries: for authentication and data st
 
 This is the default feature of Clerk
 
-- An user can login via email or social medias (Facebook, Github)
-- Once logged in, user can create a organization and will be the admin of that organization by default
+- An user can login via email or social media (Facebook, Github)
+- Logged-in users can create an organization and become its default admin.
 - Admin can send invitation to other users. User can have role of 'admin' or 'user'
-- An user can join in multiple organization and an organization can have multiple users
+- Users can join multiple organizations, and each organization can have multiple users.
 
 ### Member invitation
 
-You can add new member to your organization by sending invitation to their email. You can search for this invitation in 'spam' folder
+Admins can invite new members to their organization via email. Invitations might be found in the recipient's spam folder.
 
 ### Convex and Clerk Authentication
 
@@ -46,7 +46,7 @@ This feature is setup in `auth.config.ts`. For further information, go to <https
 
 ### Clerk webhooks
 
-In this project, we will try to connect Convext and Clerk. Specifically, we will update the database in Convex when we trigger an event in Clerk (create, update user, orgarnization...)
+In this project, we will try to connect Convext and Clerk. Specifically, we will update the database in Convex when we trigger an event in Clerk (create, update user, organization, etc.)
 
 Clerk webhooks allow you to receive event notifications from Clerk, such as when a user is created or updated. When an event occurs, Clerk will send a POST request to your webhook endpoint URL. This endpoint is configured in the 'Webhook' section in Clerk Dashboard. You can also select the events which trigger this webhook
 
@@ -54,11 +54,9 @@ The flow is as follows: Trigger Clerk event (create, update user...) => send POS
 
 The definition of Convex HTTP actions is in 'http.ts' file
 
-### Upload, delete file
+### File Upload and deletion
 
-Convex allow us to store uploaded file. First, we upload files to Convex. Each file have a `storage id` which is the value for `fileId` field of `files` schema.
-
-A file URL can be generated from a storage ID by the `storage.getUrl` (I'm calling it in the `getFiles.ts`)
+Convex allows file storage. Uploaded files are stored in Convex, each with a `storage id` (value for the `fileId` field in the `files` schema). A file URL can be generated from a storage ID using `storage.getUrl` (called in `getFiles.ts`).
 
 In an organization:
 
@@ -67,13 +65,13 @@ In an organization:
 
 ### File deletion cronjob
 
-If files are in the trash, they will be deleted in an hour, periodically.
+Files in the trash are periodically deleted after one hour.
 
 ### Real-time update
 
-This is the default feature of Convex, it using web socket to update the data in real time. When you add, update or delete a file, the update are reflected instantly.
+This is the default feature of Convex, it uses web socket to update the data in real time. When you add, update or delete a file, the update are reflected instantly.
 
 ## What I learn after building this project
 
-- How to setup authentication with Clerk
-- How webhook works via using Clerk event and Convex
+- Setting up authentication with Clerk.
+- Understanding webhook functionality through Clerk events and Convex integration.
