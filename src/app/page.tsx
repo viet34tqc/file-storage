@@ -1,5 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'File Storage',
+}
 
 // Copyright: https://tailwindui.com/components/marketing/sections/heroes
 
